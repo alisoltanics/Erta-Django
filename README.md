@@ -10,4 +10,6 @@ A simple class management system
  6. django-bootstrap3 9.1.0
  7. django-tinymce4-lite 1.7.0
  8.  pyenchant 2.0.0
+ 
+ [Erta](http://erta.pythonanywhere.com/)
 
