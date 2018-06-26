@@ -1,0 +1,43 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{% ifequal user.groups.all.0.name "teacher" %}
+{% for course in crs_admin %}
+<div class="w3-white w3-card-4 w3-round ">
+<header class="w3-container w3-round w3-white w3-shadow" style="box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);">
+  <h4>لیست دانشجویان<br></h4>
+</header>
+{% for course in course_list %}
+<h5 class="w3-margin w3-text-teal"><a href="{% url 'content_list' pk=course.pk %}"><span class="glyphicon glyphicon-tag w3-text-black"></span> {{course.cname|safe|truncatechars:400}}</a>
+  <span class="glyphicon glyphicon-user w3-text-black w3-margin-right"></span> تعداد دانشجویان: {{course.members.count|safe}}</h5>
+
+<div class="w3-row w3-row-padding w3-margin w3-animate-right">
+  {% for member in course.members.all %}
+<div class="w3-card-4 w3-col w3-row-padding s4 w3-mobile w3-white w3-right w3-margin-bottom w3-round" style="width:33.33%;margin-top:5px;">
+  <h4><span class="glyphicon glyphicon-education"></span> {{member.student|safe}} ({{member.student.first_name|safe}} {{member.student.last_name|safe}})</h4>
+  <a href="{% url 'student_content' pk=member.student_id pk_alt=course.pk %}"><button class="w3-button w3-round w3-green w3-border w3-margin-bottom w3-hover-black">تمرین ها</button></a>
+  <a href="{% url 'set_student_score' pk=member.student_id pk_alt=course.pk %}"><button class="w3-button w3-round w3-blue w3-border w3-margin-bottom w3-hover-black w3-hover-shadow">ثبت نمره‌ی میانترم</button></a>
+  {# <a href="{% url 'change_student_score' pk=member.student_id pk_alt=course.pk %}"><button class="w3-button w3-round w3-orange w3-border w3-margin-bottom w3-hover-black w3-hover-shadow">تغییر نمره</button></a>#}
+  {% for score in member.stud_scores.all %}
+  {% if score %}
+    <h6>نمره ی میانترم: {{score.score}}</h6>
+    <a href="{% url 'change_student_score' pk=score.pk pk_alt=course.pk %}"><button class="w3-button w3-text-white w3-round w3-orange w3-border w3-margin-bottom w3-hover-black w3-hover-shadow">تغییر نمره</button></a>
+  {% endif %}
+  {% empty %}
+  <div class="alert alert-danger">
+  <h5>هنوز نمره‌ای ثبت نشده است.</h5><br>
+  </div>
+
+  {% endfor %}
+<hr>
+</div>
+{% endfor %}
+{% endfor %}
+</div>
+{% endfor %}
+{% else %}
+<div class="alert alert-danger">
+    <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+{% endifequal %}
+{% include "ertaapp/pagination.html" with page=page_obj %}
+{% endblock %}

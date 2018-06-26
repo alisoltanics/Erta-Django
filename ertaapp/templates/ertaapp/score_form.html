@@ -1,0 +1,37 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+<div class="panel panel-default">
+  <div class="panel-body">
+    {% ifequal user.groups.all.0.name "teacher" %}
+
+  <h3 class="w3-text-grey "> ثبت نمره‌ی میانترم</h3>
+  <hr>
+  {% if form.errors %}
+      {% for field in form %}
+          {% for error in field.errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+          </div>
+      {% endfor %}
+  {% endif %}
+  <form method="POST">
+    {% csrf_token %}
+    <div class="col-xs-3 w3-padding w3-right w3-mobile ">
+    {{form.as_p}}
+    <button type="submit" class="btn btn-success">ثبت</button>
+  </form>
+    </div>
+    {% else %}
+    <div class="alert alert-danger">
+        <strong>اجازه‌ی دسترسی ندارید!</strong>
+    </div>
+    {% endifequal %}
+</div>
+</div>
+{% endblock %}

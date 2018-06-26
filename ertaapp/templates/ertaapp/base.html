@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load my_extras %}
+<html lang="fa">
+  <head>
+    <meta charset="utf-8">
+    <title>Erta - سیستم مدیریت کلاس</title>
+
+    <!-- Latest compiled and minified CSS -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% if not user.is_authenticated %}<link rel="stylesheet" href="{% static 'css/grad.css' %}">{% endif %}
+  </head>
+  <body class="nav-font body-cl w3-container w3-light-gray">
+{% if user.is_authenticated %}
+<div class="w3-center mob2 w3-padding w3-card w3-white" id="hmenu"><span class="glyphicon glyphicon-chevron-down w3-white"></span></div>
+    <div id="mynv" class="w3-bar  w3-border w3-white w3-padding w3-margin-bottom w3-card w3-small nv1 w3-mobile">
+           {% if user.is_authenticated %}<span class="w3-bar-item cl1 w3-mobile n0"><p>کاربر: {{user.first_name|safe}} {{user.last_name|safe}} <i class="fa fa-check-square" aria-hidden="true"></i></p></span>{% endif %}
+           {% if user.is_authenticated %}<a href="{% url 'logout' %}"><span class="w3-bar-item w3-text-deep-yellow w3-mobile n0"><p><i class="fa fa-sign-out" aria-hidden="true"></i> خروج</p></span></a>
+           {% else %}
+                 <a href="{% url 'login' %}"><i class="w3-hover-shadow w3-hover-text-green w3-text-green w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="fa fa-sign-in"></span> ورود</i></a>
+                 <a href="{% url 'signup' %}"><i class="w3-hover-shadow w3-hover-text-orange w3-text-orange w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="fa fa-user-plus"></span> عضویت</i></a>
+           {% endif %}
+           {% if user.is_authenticated %}<a href="{% url 'course_list' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right "><span class="fa fa-home"></span> خانه</i></a> {% endif %}
+           {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'teacher_course_list' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="glyphicon glyphicon-list"></span> درس های شما</i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'student_messages' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="fa fa-inbox"></span> پیام های دانشجویان <span id="pms" class="badge w3-blue w3-tiny w3-animate-fading"><span  id="pms">{% dmes user %}</span></span></i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'student_answers_all' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right "><span class="fa fa-reply"></span> پاسخ تمرین ها</i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'add_course' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="glyphicon glyphicon-plus"></span> ایجاد درس جدید</i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'add_content' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right "><span class="glyphicon glyphicon-folder-open"></span> افزودن محتوا</i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "student" %}<a href="{% url 'add_student' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right "><span class="fa fa-user-plus"></span> ثبت نام در درس</i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'course_list' %}#guide"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="fa fa-question-circle w3-text-cyan w3-spin"></span> راهنما</i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "student" %}<a href="{% url 'send_message' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="fa fa-envelope"></span> ارسال پیام به استاد</i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "student" %}<a href="{% url 'student_answers' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="fa fa-file-text"></span> تمرین های ارسال شده <span class="badge w3-green w3-tiny">{% my_tag user %}</span></i></a>{% endifequal %}
+           {% ifequal user.groups.all.0.name "student" %}<a href="{% url 'teacher_messages' %}"><i class="w3-hover-shadow w3-hover-text-blue w3-bar-item w3-mobile w3-button w3-white w3-hover-white n1 w3-right"><span class="fa fa-inbox"></span> پیام های اساتید <span class="badge w3-green w3-tiny">{% drep user %}</span></i></a>{% endifequal %}
+       </div>
+{% endif %}
+{% autoescape on %}
+        {% block content %}
+        {% endblock %}
+{% endautoescape %}
+        {% if user.is_authenticated %}
+        <footer class="w3-card w3-white w3-round w3-center w3-border w3-margin-top">
+          <p class="cl1 w3-padding" style="font-size:20px;">سیستم مدیریت کلاس Erta - ارتا</p>
+          <p class="cl1" style="font-size:17px;">{% now 'Y' %} - 2017 &copy;</p>
+          <p class="cl1" style="font-size:13px;">.by <a href="https://t.me/ascs96">Aliasghar Soltani</a>. All Rights Reserved</p>
+        </footer>
+        {% endif %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="{% static 'js/jscript.js' %}"></script>
+
+  </body>
+</html>

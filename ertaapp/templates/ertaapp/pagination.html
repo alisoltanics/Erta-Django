@@ -1,0 +1,10 @@
+<ul class="pager">
+  {% if page.has_next %}
+  <li class="cl1"><a href="?page={{ page.next_page_number }}">صفحه‌ی بعد</a></li>
+  {% endif %}
+
+  <li><span class="current cl1">صفحه {{ page.number }} از {{ page.paginator.num_pages }}</span></li>
+  {% if page.has_previous %}
+  <li class="cl1"><a href="?page={{ page.previous_page_number }}">صفحه‌ی قبل</a></li>
+  {% endif %}
+</ul>

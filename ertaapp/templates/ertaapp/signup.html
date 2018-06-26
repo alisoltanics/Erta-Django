@@ -1,0 +1,14 @@
+{% extends "ertaapp/base.html" %}
+{% load bootstrap3 %}
+
+
+{% block content %}
+<div class="w3-container w3-card-4 w3-white w3-card w3-margin w3-padding">
+    <h2>عضویت</h2><br>
+    <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" value="ثبت نام" class="btn btn-primary">
+    </form>
+</div>
+{% endblock %}

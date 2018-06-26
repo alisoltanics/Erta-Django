@@ -1,0 +1,195 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages|slice:":1" %}
+    <li{% if message.tags %} class="{{ message.tags }} alert alert-success"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% ifequal user.groups.all.0.name "teacher" %}
+<div id="help" class="w3-panel w3-card w3-border w3-white w3-text-grey  ">
+  <h3 class=" w3-margin-bottom cl1"><span class="glyphicon glyphicon-question-sign w3-text-cyan"></span> از کجا شروع کنم؟ </h3>
+  <p class="w3-padding w3-animate-zoom"><span class="glyphicon glyphicon-exclamation-sign cl1"></span> <span class="w3-large cl1">قدم اول: </span><a class="w3-text-gray" href="{% url 'add_course' %}"  target="_blank"><span class="glyphicon glyphicon-plus"></span> ایجاد درس جدید</a></p>
+  <p class="w3-padding w3-animate-zoom"><span class="glyphicon glyphicon-exclamation-sign cl1"></span> <span class="w3-large cl1">قدم دوم: </span><span class="w3-text-gray">کد مورد نظر دانشگاه: semcs و کد درسی که قبلا ایجاد کرده اید را برای ثبت نام در اختیار دانشجویان قرار دهید. </span></p>
+  <p class="w3-padding w3-animate-zoom"><span class="glyphicon glyphicon-exclamation-sign cl1"></span> <span class="w3-large cl1">قدم سوم: </span><a class="w3-text-gray " href="{% url 'add_content' %}" target="_blank"><span class="glyphicon glyphicon-folder-open"></span> افزودن محتوا به درس</a></p>
+</div>
+<!-- accesses -->
+<div class="w3-row w3-row-padding w3-margin-bottom w3-card-4 w3-white access">
+<div class="w3-col w3-row-padding s4 w3-mobile w3-center w3-margin-bottom" style="width:20%;margin-top:5px;">
+<i class="fa fa-envelope w3-text-grey w3-margin-top" style="font-size:16px"> تعداد پیام ها</i><hr>
+<div class="w3-container w3-center w3-text-grey">
+{% for course in crs %}
+<p><a href="{% url 'message_course_list' pk=course.pk %}"><span class="w3-badge cl2">{{course.messages.count|safe}}</span></a> <a href="{% url 'course_remove' pk=course.id %}"><span class="w3-left glyphicon glyphicon-remove-sign w3-text-red" style="font-size:20px;"></span></a> <a href="{% url 'edit_course' pk=course.id %}"> <span class=" w3-text-orange w3-left w3-margin-left glyphicon glyphicon-cog"  style="font-size:20px;"></span></a></p><hr>
+{% endfor %}
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile  w3-center w3-margin-bottom" style="width:20%;margin-top:5px;">
+<i class="fa fa-reply w3-text-grey w3-margin-top" style="font-size:16px"> تعداد پاسخ تمرین ها</i><hr>
+<div class="w3-container w3-center w3-text-grey">
+{% for course in crs %}
+<p><a href="{% url 'course_answers' pk=course.pk %}"><span class="w3-badge cl2">{{course.answers.count|safe}}</span></a></p><hr>
+{% endfor %}
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile  w3-center w3-margin-bottom" style="width:20%;margin-top:5px;">
+<i class="fa fa-user w3-text-grey w3-margin-top" style="font-size:16px"> تعداد دانشجویان</i><hr>
+<div class="w3-container w3-center w3-text-grey">
+{% for course in crs %}
+<p><a href="{% url 'students_list' pk=course.pk %}"><span class="w3-badge cl2">{{course.members.count|safe}}</span></a></p><hr>
+{% endfor %}
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile  w3-center w3-margin-bottom" style="width:20%;margin-top:5px;">
+<i class="fa fa-shield w3-text-grey w3-margin-top" style="font-size:16px"> کد درس</i><hr>
+<div class="w3-container w3-center w3-text-grey">
+{% for course in crs %}
+<p class="cl1">{{course.course_code}}</p><hr>
+{% endfor %}
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile  w3-center w3-margin-bottom" style="width:20%;margin-top:5px;">
+<i class="fa fa-check w3-text-grey w3-margin-top" style="font-size:16px"> درس</i><hr>
+<div class="w3-container w3-center w3-text-grey">
+{% for course in crs %}
+<p><a href="{% url 'content_list' pk=course.pk %}">{{course.cname|safe}}</a></p><hr>
+{% endfor %}
+</div>
+</div>
+</div>
+<!-- accesses -->
+<div class="w3-row w3-row-padding ">
+  <!-- last answers -->
+<div class="w3-col w3-card w3-row-padding s4 w3-mobile w3-white w3-center w3-margin-bottom " style="width:50%;margin-top:5px;">
+  <i class="fa fa-sticky-note cl1" style="font-size:30px"><span class="w3-left cl1 w3-margin-right"><h4>آخرین پاسخ تمرین ها</h4></span></i><hr>
+  <div class="w3-container w3-center w3-text-orange">
+    <div class=" w3-row w3-row-padding  w3-animate-zoom">
+    {% for answer in ans|slice:":3" %}
+    {% for course in crs %}
+    {% if answer.course_id == course.id %}
+    <div class=" w3-white w3-padding w3-margin-bottom w3-animate-zoom">
+      <h4>عنوان تمرین: {{answer.content|safe}}</h4>
+      <p class="w3-text-black">نام درس: {{answer.course.cname|safe}}</p>
+      <p class="w3-text-black"><span class="glyphicon glyphicon-user cl1"></span> <span class="w3-text-grey">{{answer.author|safe}} </span><span class="w3-text-black">({{answer.author.first_name|safe}} {{answer.author.last_name|safe}})</span></p>
+      <p class="w3-text-grey"><i class="fa fa-calendar cl1" aria-hidden="true"></i> {{answer.create_date}}</p>
+    </div><hr>
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+    <a href="{% url 'student_answers_all' %}"><button class="w3-margin-bottom btn btn-primary"><i class="fa fa-reply" aria-hidden="true"></i> همه‌ی تمرین ها</button></a>
+</div>
+  </div>
+</div>
+<!-- last answers -->
+<!-- last messages-->
+<div class="w3-col w3-row-padding w3-card s4 w3-mobile w3-white w3-center w3-margin-bottom" style="width:50%;margin-top:5px;">
+<i class="fa fa-envelope cl1" style="font-size:30px"><span class="w3-left cl1 w3-margin-right"><h4>آخرین پیام ها</h4></span></i><hr>
+  <div class="w3-container w3-center w3-text-blue">
+    <div class=" w3-row w3-row-padding w3-animate-zoom">
+    {% for message in messages_all|slice:":3" %}
+    <div class="w3-white w3-padding w3-margin-bottom w3-animate-zoom">
+      <h4>عنوان پیام: {{message.title|safe}}</h4>
+      <p class="w3-text-black">نام درس: {{message.course.cname|safe}}</p>
+      <p class="w3-text-black"><span class="glyphicon glyphicon-user cl1"></span> <span class="w3-text-black"><span class="w3-text-grey">{{message.author|safe}} </span>({{message.author.first_name|safe}} {{message.author.last_name|safe}})</span></p>
+    <p class="w3-text-grey"><i class="fa fa-calendar cl1" aria-hidden="true"></i> {{message.create_date}}</p>
+  </div><hr>
+    {% endfor %}
+    <a href="{% url 'student_messages' %}"><button class="btn btn-primary w3-margin-bottom"><i class="fa fa-inbox" aria-hidden="true"></i> همه‌ی پیام‌ها</button></a>
+  </div>
+</div>
+</div>
+<!-- last messages-->
+</div>
+  <div id="guide" class="w3-panel w3-card w3-border w3-white w3-text-grey w3-animate-left w3-margin_top">
+    <h3 class="w3-text-black">راهنما: </h3>
+    <p class="w3-padding"><span class="glyphicon glyphicon-exclamation-sign"></span> مشاهده‌ی تمرین های دانشجویان به تفکیک درس و دانشجو: <span class="glyphicon glyphicon-list"></span> درس های شما >> لیست دانشجویان >> تمرین ها</p>
+    <p class="w3-padding"><span class="glyphicon glyphicon-exclamation-sign"></span> مشاهده‌ی پیام های دانشجویان به تفکیک هر درس: <span class="glyphicon glyphicon-list"></span> درس های شما >> پیام های دانشجویان</p>
+    <p class="w3-padding"><span class="glyphicon glyphicon-exclamation-sign"></span> ثبت نمره برای دانشجو: <span class="glyphicon glyphicon-list"></span> درس های شما >> لیست دانشجویان >> ثبت نمره</p>
+    <p class="w3-padding"> <span class="glyphicon glyphicon-exclamation-sign"></span> مشاهده‌ی درس هایی که توسط شما ارایه شده اند:  <span class="glyphicon glyphicon-list"></span> درس های شما </p>
+    <p class="w3-padding"><span class="glyphicon glyphicon-exclamation-sign"></span> ارسال تمرین - اطلاعیه یا افزودن منابع برای درس: <span class="glyphicon glyphicon-folder-open"></span> افزودن محتوا </p>
+</div>
+{% endifequal %}
+{% ifequal user.groups.all.0.name "student" %}
+<div id="help" class="w3-panel w3-card w3-border w3-white w3-text-grey w3-white">
+  <h3 class="w3-text-black"><span class="glyphicon glyphicon-question-sign w3-text-cyan"></span> از کجا شروع کنم؟ </h3>
+  <p class="w3-padding w3-animate-zoom"><span class="glyphicon glyphicon-exclamation-sign w3-text-green"></span> <span >قدم اول: </span><a class="w3-text-blue w3-hover-text-black" href="{% url 'add_student' %}"  target="_blank"><span class="fa fa-user-plus"></span> ثبت نام در درس</a></p>
+  <p class="w3-padding w3-animate-zoom"><span class="glyphicon glyphicon-exclamation-sign w3-text-green"></span> <span >قدم دوم: </span><span class=" w3-text-blue"> ورود به صفحه‌ی درس</span></p>
+  <p class="w3-padding w3-animate-zoom"><span class="glyphicon glyphicon-exclamation-sign w3-text-green"></span> <span >قدم سوم: </span><span class=" w3-text-blue">تمرین ها >> ادامه‌ی مطلب >> ارسال پاسخ تمرین</span></p>
+</div>
+<div class="w3-white w3-card-4">
+<header class="w3-container w3-card w3-white w3-shadow">
+  <h3><span class="glyphicon glyphicon-ok w3-text-cyan"></span> دروس اخذ شده توسط شما<br></h3>
+</header>
+      <div class="w3-row w3-row-padding w3-margin w3-animate-right">
+      {% for course in course_list %}
+<div class="w3-card-4 w3-col w3-row-padding s4 w3-mobile w3-white w3-right w3-margin-bottom w3-round" style="width:33.33%;margin-top:5px;">
+  <img src="{{course.picture.url}}" alt="Norway" class="w3-mobile" style="width:100%;max-height:220px">
+  <div class="w3-container w3-right w3-text-brown">
+   <h2><h6>نام درس: {{course.cname|safe|truncatechars:400}}</h6></h2>
+   <p>نام استاد: {{course.prof.first_name|safe|truncatechars:400}} {{course.prof.last_name|safe|truncatechars:400}}</p>
+   <p> سال: {{course.year|safe|truncatechars:400}}</p>
+   <p> ترم: {{course.term|safe|truncatechars:400}}</p>
+    <a href="{% url 'content_list' pk=course.pk %}"><button class="w3-button w3-round w3-pink w3-margin-bottom w3-hover-green">ورود</button></a>
+{% for member in course.members.all %}
+{% if member.student == user %}
+{% for score in member.stud_scores.all %}
+<button class="w3-button w3-round w3-green w3-border w3-margin-bottom w3-hover-green"><i class="fa fa-check-circle" aria-hidden="true"></i> نمره: {{score.score}}</button>
+{% endfor %}
+{% endif %}
+{% endfor %}
+  </div>
+</div>
+      {% endfor %}
+    </div>
+</div>
+{% endifequal %}
+{% if not user.is_authenticated %}
+<div class="log1">
+<div class="w3-row w3-row-padding w3-margin">
+<div class="w3-col w3-row-padding s4 w3-mobile w3-center w3-margin-bottom" style="width:33.33%;margin-top:5px;">
+<i class="fa fa-sticky-note w3-text-orange" style="font-size:60px"></i>
+<div class="w3-container w3-center w3-text-orange">
+<p>دریافت پاسخ تمرین‌ها</p>
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile  w3-center w3-margin-bottom" style="width:33.33%;margin-top:5px;">
+<i class="fa fa-envelope w3-text-blue" style="font-size:60px"></i>
+<div class="w3-container w3-center w3-text-blue">
+<p>دریافت پیام از دانشجو</p>
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile  w3-center w3-margin-bottom" style="width:33.33%;margin-top:5px;">
+<i class="fa fa-check w3-text-green" style="font-size:60px"></i>
+<div class="w3-container w3-center w3-text-green">
+<p>ثبت نمره</p>
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile  w3-center w3-margin-bottom" style="width:33.33%;margin-top:5px;">
+<i class="glyphicon glyphicon-plus w3-text-purple" style="font-size:60px"></i>
+<div class="w3-container w3-center w3-text-purple">
+<p>ایجاد درس جدید</p>
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile w3-center w3-margin-bottom" style="width:33.33%;margin-top:5px;">
+<i class="fa fa-user-plus w3-text-teal" style="font-size:60px"></i>
+<div class="w3-container w3-center w3-text-teal">
+<p>ثبت نام دانشجو در درس</p>
+</div>
+</div>
+<div class="w3-col w3-row-padding s4 w3-mobile  w3-center w3-margin-bottom" style="width:33.33%;margin-top:5px;">
+<i class="fa fa-tags w3-text-amber" style="font-size:60px"></i>
+<div class="w3-container w3-center w3-text-amber">
+<p>افزودن محتوا به درس</p>
+</div>
+</div>
+</div>
+</div>
+<div class="w3-container w3-padding w3-center" style="margin-top:90px;">
+<h1 class="w3-text-white">قبلا ثبت نام کردید؟ با نام کاربری خود وارد شوید.</h1>
+</div>
+<div class="w3-container w3-padding w3-center" style="margin-top:50px;">
+<a href="{% url 'login' %}"><button type="button" class="btn w3-green w3-border-white w3-hover-shadow w3-xlarge w3-card-4">ورود</button></a>
+<a href="{% url 'signup' %}"><button type="button" class="btn w3-pink w3-xlarge w3-border-white w3-hover-shadow w3-card-4">ثبت نام</button></a>
+</div>
+{% endif %}
+{% endblock %}

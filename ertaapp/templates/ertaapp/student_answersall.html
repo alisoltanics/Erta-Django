@@ -1,0 +1,26 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+
+    <div class="w3-card w3-white w3-padding">
+      <h3>تمرین های ارسال شده توسط شما</h3>
+    </div>
+      <div class=" w3-row w3-row-padding w3-margin w3-animate-right">
+
+      {% for answer in answers_all %}
+      <div class="w3-card w3-white w3-padding w3-margin">
+        <h4 class="w3-text-blue">نام درس: {{answer.course.cname|safe}}</h4>
+        <h6>دانشجو : {{answer.author|safe}} ({{answer.author.first_name|safe}} {{answer.author.last_name|safe}})</h6>
+        <h6>عنوان تمرین: {{answer.content|safe}}</h6>
+        <p class="w3-text-brown">{{answer.text|safe}}</p>
+        <a href="{{answer.file_ta.url}}"><button class="btn btn-success">فایل پاسخ</button></a> <br><br>
+        <p class="w3-text-blue"><i class="fa fa-calendar w3-text-orange" aria-hidden="true"></i> {{answer.create_date}}</p>
+
+      </div>
+
+
+      {% endfor %}
+      {% include "ertaapp/pagination.html" with page=page_obj %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{% ifequal user.groups.all.0.name "teacher" %}
+{% if object.prof == user %}
+<form method="POST">
+  {% csrf_token %}
+  <div class="panel-body">
+  <div class="alert alert-danger">
+  <h2>درس {{object.cname}} را حذف میکنید؟ </h2><br>
+  <h3>هشدار: </h3>
+  <p>با حذف درس تمامی پاسخ تمرین ها و پیام های دانشجویان نیز حذف میشود.</p><br>
+  <input type="submit" class="btn btn-danger w3-large" value="حذف درس">
+</div>
+</div>
+</form>
+{% else %}
+<div class="alert alert-danger">
+  <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+{% endif %}
+{% endifequal %}
+{% endblock %}

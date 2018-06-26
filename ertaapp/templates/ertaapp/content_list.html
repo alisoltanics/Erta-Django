@@ -1,0 +1,154 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+
+{% if user.groups.all.0.name == 'student' %}
+{% for course in crs %}
+    <ul class="nav nav-tabs w3-margin-top">
+      <li class="active pull-right"><a data-toggle="tab" href="#notifi">اطلاعیه ها</a></li>
+      <li class="pull-right"><a data-toggle="tab" href="#tamrini">تمرین ها</a></li>
+      <li class="pull-right"><a data-toggle="tab" href="#menu3">منابع درس</a></li>
+    </ul>
+    {% for content in content_list|slice:":1" %}
+    <h4 class="w3-padding w3-text-blue"><i class="fa fa-bookmark" aria-hidden="true"></i> {{content.course.cname|safe}}:<br></h4>
+    {% endfor %}
+    <div class="tab-content">
+      <div id="notifi" class="tab-pane fade in active">
+        <div class='notif'>
+        {% for content in notif %}
+        <div class="w3-row w3-row-padding w3-margin">
+          <div class="w3-panel w3-card-4 w3-white w3-text-grey w3-padding">
+            <div class="w3-row w3-container w3-twothird">
+              <h4 class="w3-text-black"><span class="glyphicon glyphicon-triangle-left">{{content.title|safe|truncatechars:400}}</h4>
+                <span class="w3-small w3-text-grey"><i class="fa fa-calendar" aria-hidden="true"></i> {{content.create_date}}</span>
+                <p class="w3-margin-bottom w3-margin-top">{{content.text|safe|striptags|truncatechars:140}}</p>
+                <a href="{% url 'content_detail' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-primary">ادامه‌ی مطلب</button></a>
+            </div>
+            <div class="w3-container w3-third">
+              <img class="w3-card-4" src="../media/course_pics/notif.jpeg" style="width:100%;max-height:220px">
+            </div>
+        </div>
+      </div>
+        {% endfor %}
+      </div>
+    </div>
+      <div id="tamrini" class="tab-pane fade">
+        <div class='tamrin'>
+        {% for content in tamrin %}
+        <div class="w3-row w3-row-padding w3-margin">
+          <div class="w3-panel w3-card-4 w3-white w3-text-grey w3-padding">
+            <div class="w3-row w3-container w3-twothird">
+              <h4 class="w3-text-black"><span class="glyphicon glyphicon-triangle-left">{{content.title|safe|truncatechars:400}}</h4>
+                <span class="w3-small w3-text-grey"><i class="fa fa-calendar" aria-hidden="true"></i> {{content.create_date}}</span>
+                <p class="w3-margin-bottom w3-margin-top">{{content.text|safe|striptags|truncatechars:140}}</p>
+                <p class="w3-margin-bottom cl1"><span class="glyphicon glyphicon-paperclip"></span> مهلت ارسال پاسخ: {{content.due}}</p>
+                <a href="{% url 'content_detail' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-primary">ادامه‌ی مطلب</button></a>
+            </div>
+            <div class="w3-container w3-third">
+              <img class="w3-card-4" src="../media/course_pics/homework.jpg" style="width:100%;max-height:220px">
+            </div>
+        </div>
+      </div>
+        {% endfor %}
+        </div>
+    </div>
+      <div id="menu3" class="tab-pane fade">
+        <div class='resource'>
+        {% for content in resource %}
+        <div class="w3-row w3-row-padding w3-margin">
+          <div class="w3-panel w3-card-4 w3-white w3-text-grey w3-padding">
+            <div class="w3-row w3-container w3-twothird">
+              <h4 class="w3-text-black"><span class="glyphicon glyphicon-triangle-left">{{content.title|safe|truncatechars:400}}</h4>
+                <span class="w3-small w3-text-grey"><i class="fa fa-calendar" aria-hidden="true"></i> {{content.create_date}}</span>
+                <p class="w3-margin-bottom w3-margin-top">{{content.text|safe|striptags|truncatechars:140}}</p>
+                <a href="{% url 'content_detail' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-primary">ادامه‌ی مطلب</button></a>
+            </div>
+            <div class="w3-container w3-third">
+              <img class="w3-card-4" src="../media/course_pics/resources.jpg" style="width:100%;max-height:220px">
+            </div>
+        </div>
+      </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+{% endfor %}
+
+{% elif user.groups.all.0.name == 'teacher' %}
+
+{% for course in crs_admin %}
+<ul class="nav nav-tabs">
+  <li class="active pull-right"><a data-toggle="tab" href="#notifi">اطلاعیه ها</a></li>
+  <li class="pull-right"><a data-toggle="tab" href="#tamrini">تمرین ها</a></li>
+  <li class="pull-right"><a data-toggle="tab" href="#menu3">منابع درس</a></li>
+</ul>
+{% for content in content_list|slice:":1" %}
+<h4 class="w3-padding w3-text-blue"><i class="fa fa-bookmark" aria-hidden="true"></i> {{content.course.cname|safe}}:<br></h4>
+{% endfor %}
+<div class="tab-content">
+  <div id="notifi" class="tab-pane fade in active">
+    <div class='notif'>
+    {% for content in notif %}
+    <div class="w3-row w3-row-padding w3-margin">
+      <div class="w3-panel w3-card-4 w3-white w3-text-grey w3-padding">
+        <div class="w3-row w3-container w3-twothird">
+          <h4 class="w3-text-black"><span class="glyphicon glyphicon-triangle-left">{{content.title|safe|truncatechars:400}}</h4>
+            <span class="w3-small w3-text-grey"><i class="fa fa-calendar" aria-hidden="true"></i> {{content.create_date}}</span>
+            <p class="w3-margin-bottom w3-margin-top">{{content.text|safe|striptags|truncatechars:140}}</p>
+            <a href="{% url 'content_detail' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-primary">ادامه‌ی مطلب</button></a>
+            {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'update_content' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> ویرایش </button></a>{% endifequal %}
+            {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'content_remove' pk=content.pk %}"><button class="w3-margin-bottom btn btn-danger"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> حذف </button></a>{% endifequal %}
+
+        </div>
+        <div class="w3-container w3-third">
+          <img class="w3-card-4" src="../media/course_pics/notif.jpeg" style="width:100%;max-height:220px">
+        </div>
+    </div>
+  </div>
+    {% endfor %}
+  </div>
+</div>
+  <div id="tamrini" class="tab-pane fade">
+    <div class='tamrin'>
+    {% for content in tamrin %}
+    <div class="w3-row w3-row-padding w3-margin">
+      <div class="w3-panel w3-card-4 w3-white w3-text-grey w3-padding">
+        <div class="w3-row w3-container w3-twothird">
+          <h4 class="w3-text-black"><span class="glyphicon glyphicon-triangle-left">{{content.title|safe|truncatechars:400}}</h4>
+            <span class="w3-small w3-text-grey"><i class="fa fa-calendar" aria-hidden="true"></i> {{content.create_date}}</span>
+            <p class="w3-margin-bottom w3-margin-top">{{content.text|safe|striptags|truncatechars:140}}</p>
+            <p class="w3-margin-bottom cl1"><span class="glyphicon glyphicon-paperclip"></span> مهلت ارسال پاسخ: {{content.due}}</p>
+            <a href="{% url 'content_detail' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-primary">ادامه‌ی مطلب</button></a>
+            {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'update_content' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> ویرایش </button></a>{% endifequal %}
+        </div>
+        <div class="w3-container w3-third">
+          <img class="w3-card-4" src="../media/course_pics/homework.jpg" style="width:100%;max-height:220px">
+        </div>
+    </div>
+  </div>
+    {% endfor %}
+    </div>
+</div>
+  <div id="menu3" class="tab-pane fade">
+    <div class='resource'>
+    {% for content in resource %}
+    <div class="w3-row w3-row-padding w3-margin">
+      <div class="w3-panel w3-card-4 w3-white w3-text-grey w3-padding">
+        <div class="w3-row w3-container w3-twothird">
+          <h4 class="w3-text-black"><span class="glyphicon glyphicon-triangle-left">{{content.title|safe|truncatechars:400}}</h4>
+            <span class="w3-small w3-text-grey"><i class="fa fa-calendar" aria-hidden="true"></i> {{content.create_date}}</span>
+            <p class="w3-margin-bottom w3-margin-top">{{content.text|safe|striptags|truncatechars:140}}</p>
+            <a href="{% url 'content_detail' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-primary">ادامه‌ی مطلب</button></a>
+            {% ifequal user.groups.all.0.name "teacher" %}<a href="{% url 'update_content' pk=content.pk pk_alt=content.course_id %}"><button class="w3-margin-bottom btn btn-warning"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> ویرایش </button></a>{% endifequal %}
+        </div>
+        <div class="w3-container w3-third">
+          <img class="w3-card-4" src="../media/course_pics/resources.jpg" style="width:100%;max-height:220px">
+        </div>
+    </div>
+  </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

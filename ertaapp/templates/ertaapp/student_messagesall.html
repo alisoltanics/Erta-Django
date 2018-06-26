@@ -1,0 +1,41 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+
+{% ifequal user.groups.all.0.name "teacher" %}
+
+    <div class="w3-card w3-white w3-padding">
+      <h3>پیام های ارسال شده توسط دانشجویان</h3>
+    </div>
+      <div class=" w3-row w3-row-padding w3-margin w3-animate-right">
+      {% for message in messages_all %}
+      <div class="w3-card w3-white w3-padding w3-margin w3-round">
+        <h4 class="w3-text-blue">نام درس: {{message.course.cname|safe}}</h4>
+        <h6 class="w3-text-grey">ارسال شده توسط : <span class="w3-text-black">{{message.author|safe}} ({{message.author.first_name|safe}} {{message.author.last_name|safe}})</span></h6>
+        <p class="w3-text-grey"><i class="fa fa-calendar w3-text-orange" aria-hidden="true"></i> {{message.create_date}}</p>
+      <div class="w3-panel w3-rightbar w3-card-4 w3-light-grey">
+        <i class="fa fa-quote-right w3-large w3-text-black"></i><br>
+            <p class="w3-xlarge w3-serif"><h5>عنوان: {{message.title|safe}}</h5></p>
+            <p class="w3-text-brown">{{message.text|safe}}</p>
+      </div>
+      {% for reply in reps %}
+      {% if reply.message_id == message.id %}
+      <p class="w3-text-blue">پاسخ شما: </p>
+        <p>{{reply.text|safe}}</p>
+        <p class="w3-text-green">{{reply.create_date}}</p>
+        <hr>
+      {% endif %}
+
+      {% endfor %}
+      <a href="{% url 'reply_to_message' pk=message.id pk_alt=message.author_id %}"><button class="w3-button w3-round w3-cyan w3-text-white w3-border w3-margin-bottom w3-hover-green w3-hover-shadow"><i class="fa fa-reply" aria-hidden="true"></i>
+پاسخ دادن</button></a>
+      </div>
+      {% endfor %}
+     </div>
+     {% else %}
+     <div class="alert alert-danger">
+         <strong>اجازه‌ی دسترسی ندارید!</strong>
+     </div>
+     {% endifequal %}
+     {% include "ertaapp/pagination.html" with page=page_obj %}
+
+{% endblock %}

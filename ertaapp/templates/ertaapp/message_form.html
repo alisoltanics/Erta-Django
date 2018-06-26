@@ -1,0 +1,44 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{{ form.media }}
+{% ifequal user.groups.all.0.name "student" %}
+<div class="panel panel-default w3-card w3-mobile ">
+  <div class="panel-body form-group">
+  <h3 class="w3-text-grey "><span class="glyphicon glyphicon-envelope "></span> ارسال پیام به استاد </h3>
+  <hr>
+  <!-- Form Errors -->
+  {% if form.errors %}
+      {% for field in form %}
+          {% for error in field.errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+          </div>
+      {% endfor %}
+  {% endif %}
+  <form method="POST">
+    {% csrf_token %}
+    <div class="col-xs-7 w3-padding w3-right w3-mobile ">
+    {% for field in form %}
+
+            <div class="w3-margin-top w3-right w3-mobile">{{ field.label }}</div>
+            <div style="margin-top:50px;">
+              {{ field }}
+            </div>
+
+    {% endfor %}
+
+
+    <div class="w3-margin-top"><button type="submit" class="btn btn-info  w3-right">ارسال پیام</button></div>
+    </div>
+
+  </form>
+</div>
+</div>
+{% endifequal %}
+{% endblock %}

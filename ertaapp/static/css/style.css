@@ -1,0 +1,77 @@
+
+.body-cl{
+  direction: rtl;
+  font-family: 'Vazir';
+}
+.body-cl a{
+  text-decoration: none;
+}
+
+.da{
+  background-color:  #f2f2f2;
+}
+.fileUpload {
+	position: relative;
+	overflow: hidden;
+	margin: 10px;
+}
+.fileUpload input.upload {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+
+.cl1{
+  color: #3b5998;
+}
+.cl2{
+  background-color: #3b5998;
+}
+@media (max-width: 930px) {
+    .access {
+        display: none;
+    }
+}
+@media (max-width: 930px) {
+    .nv1 {
+        display: none;
+    }
+}
+@media (min-width: 930px) {
+    .mob2 {
+        display: none;
+    }
+}
+
+.container{
+  font-family: 'Vazir';
+}
+h1,h2,h3,h4,h5,h6,p,a,div,body,html{
+  font-family: 'Vazir';
+}
+
+@media (max-width: 730px) {
+    .log1 {
+        display: none;
+    }
+}
+
+@font-face {
+  font-family: Vazir;
+  src: url('../fonts/Vazir.eot');
+  src: url('../fonts/Vazir.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/Vazir.woff') format('woff'),
+       url('../fonts/Vazir.ttf') format('truetype');
+  font-weight: normal;
+}
+
+/*.t1{
+  border-left: 5px;
+  border-color: blue;
+}*/

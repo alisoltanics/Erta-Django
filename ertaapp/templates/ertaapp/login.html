@@ -1,0 +1,31 @@
+{% extends "ertaapp/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+<div class="w3-right w3-margin w3-text-white w3-padding col-xs-5">
+    <h3 style="margin-top:110px;"></h3><br>
+    <form method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" value="ورود" class="btn btn-success">
+    </form>
+    <div class="w3-text-white w3-margin-top">
+      <h6>ثبت نام نکرده اید؟</h6>
+      <a href="{% url 'signup' %}"><button type="button" class="btn w3-pink w3-shadow">عضویت</button></a>
+    </div>
+</div>
+
+
+<div class="container log1 w3-left w3-text-white">
+  <h4 class="slides text1 ">&#10067; ثبت نام نکرده‌اید؟ کد مورد نظر دانشگاه را از استاد خود بپرسید و در سایت عضو شوید.
+  </h4>
+  <h4 class="slides text1 ">&#10071; با داشتن کد ‌درس میتوانید در درس مورد نظر خودتون ثبت نام کنید.
+  </h4>
+  <h4 class="slides text1 ">&#10004; بعد از ثبت نام در درس میتوانید پاسخ تمرین های درس را ارسال کنید.</h4>
+</div>
+<img class="w3-card-4 log1 w3-opacity-min w3-left w3-round w3-margin-left w3-margin-top" src="{% static 'images/erta.png' %}" style="width:50%;max-height:550px">
+
+{% endif %}
+{% endblock %}

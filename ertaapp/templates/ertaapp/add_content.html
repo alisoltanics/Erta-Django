@@ -1,0 +1,45 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{{ form.media }}
+<div class="panel panel-default">
+  <div class="panel-body">
+    {% ifequal user.groups.all.0.name "teacher" %}
+
+    <h3 class="w3-text-grey "><span class="fa fa-file-text"></span> افزودن محتوا به درس </h3>
+    <hr>
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form enctype="multipart/form-data" method="POST">
+      {% csrf_token %}
+      <div class="col-xs-5 w3-padding w3-right w3-mobile ">
+      {{form.as_p}}
+      <p><input type="button" class="btn btn-primary w3-margin-bottom" value="انتخاب فایل" onclick="document.getElementById('file1').click();"></p>
+      <button type="submit" class="btn w3-orange w3-text-white w3-card">افزودن</button>
+    </form>
+      </div>
+
+
+{% else %}
+<div class="alert alert-danger">
+    <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+      {% endifequal %}
+
+
+</div>
+</div>
+{# <script type="text/javascript" src="{{ MEDIA_URL }}/js/tiny_mce/tiny_mce.js"></script>#}
+
+{% endblock %}

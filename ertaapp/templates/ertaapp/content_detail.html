@@ -1,0 +1,79 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{% if user.groups.all.0.name != 'teacher' %}
+{% for course in crs %}
+<div class="w3-card w3-white w3-padding w3-margin w3-container">
+<h4 class="w3-padding w3-text-blue"><a href="{% url 'content_list' pk=content.course_id %}"><i class="fa fa-bookmark" aria-hidden="true"></i> {{content.course.cname|safe}}</a><br></h4><hr>
+<h3 class="w3-text-grey"><i class="fa fa-circle w3-small" aria-hidden="true"></i> {{content.title|safe|truncatechars:400}}</h3>
+<p class="w3-text-black">{{content.text|safe}}</p>
+{% if content.file_tamrin %}
+<a href='{{content.file_tamrin.url}}'><button class="btn btn-success w3-margin-bottom">فایل ضمیمه</button></a>
+{% endif %}
+<p class="w3-small w3-text-grey  w3-margin-top w3-margin-bottom"><i class="fa fa-calendar w3-text-grey" aria-hidden="true"></i> {{content.create_date}}</p>
+
+{% for answer in content.answers.all %}
+{% if answer.author == user %}
+<hr><h4><span style="color:#00b8e6">پاسخ شما:</span></h4>
+<h3>{{answer.text|safe|linebreaksbr}}</h3>
+<p>{{answer.create_date}}</p>
+{% if answer.file_ta %}
+<a href='{{answer.file_ta.url}}'><button class="btn w3-orange w3-text-white w3-card w3-margin-bottom">فایل پاسخ</button></a><hr>
+{% endif %}
+{% endif %}
+{% endfor %}
+{% ifequal user.groups.all.0.name "student" %}
+{% if content.cat_id == 1 %}
+<a href="{% url 'add_answer' pk=content.pk pk_alt=content.course.id %}"><button type="button" class="btn btn-primary"><i class="fa fa-reply" aria-hidden="true"></i> ارسال پاسخ تمرین</button></a>
+</div>
+
+<div class="alert w3-pale-red ">
+  <h6 class="w3-text-red"><b>تا تاریخ {{content.due}} میتوانید به تمرین پاسخ دهید.</b></h6>
+  <h6 class="w3-text-purple"><b>- فقط یک بار مجاز به ارسال جواب تمرین هستید.</b></h6>
+  <h6 class="w3-text-purple"><b>- مجاز به ویرایش جواب ارسال شده نیستید.</b></h6>
+</div>
+
+{% endif %}
+{% endifequal %}
+{% endfor %}
+
+
+{% else %}
+{% for course in crs_admin %}
+
+<div class="w3-card w3-white w3-padding w3-margin">
+<h4 class="w3-padding w3-text-blue"><a href="{% url 'content_list' pk=content.course_id %}"><i class="fa fa-bookmark" aria-hidden="true"></i> {{content.course.cname|safe}}</a><br></h4><hr>
+<h3 class="w3-text-grey"><i class="fa fa-circle w3-small" aria-hidden="true"></i> {{content.title|safe|truncatechars:400}}</h3>
+<p>{{content.text|safe}}</p>
+{% if content.file_tamrin %}
+<a href='{{content.file_tamrin.url}}'><button class="btn btn-success w3-margin-bottom">فایل ضمیمه</button></a>
+
+{% endif %}
+
+<p class="w3-small w3-text-grey w3-margin-top w3-margin-bottom"><i class="fa fa-calendar w3-text-grey" aria-hidden="true"></i> {{content.create_date}}</p>
+
+{% for answer in content.answers.all %}
+{% if answer.author == user %}
+<hr><h4><span style="color:#00b8e6">پاسخ شما:</span></h4>
+<h3>{{answer.text|safe|linebreaksbr}}</h3>
+<p>{{answer.create_date}}</p>
+{% if answer.file_ta %}
+<a href='{{answer.file_ta.url}}'><button class="btn w3-orange w3-text-white w3-card w3-margin-bottom">فایل پاسخ</button></a><hr>
+{% endif %}
+<hr>
+{% endif %}
+{% endfor %}
+{% ifequal user.groups.all.0.name "student" %}
+{% if content.cat_id == 1 %}
+<a href="{% url 'add_answer' pk=content.pk pk_alt=content.course.id %}"><button type="button" class="btn btn-primary"><i class="fa fa-reply" aria-hidden="true"></i> ارسال پاسخ تمرین</button></a>
+</div>
+
+<div class="alert w3-pale-red ">
+  <h6 class="w3-text-purple"><b>تا تاریخ {{content.due}} میتوانید به تمرین پاسخ دهید.</b></h6>
+  <h6 class="w3-text-purple"><b>- فقط یک بار مجاز به ارسال جواب تمرین هستید.</b></h6>
+  <h6 class="w3-text-purple"><b>- مجاز به ویرایش جواب ارسال شده نیستید.</b></h6>
+</div>
+{% endif %}
+{% endifequal %}
+{% endfor %}
+{% endif %}
+{% endblock %}

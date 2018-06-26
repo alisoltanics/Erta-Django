@@ -1,0 +1,83 @@
+{% extends "ertaapp/base.html" %}
+{% load bootstrap3 %}
+{% block content %}
+{% if object %}
+{% if object.prof == user %}
+<div class="panel panel-default">
+  <div class="panel-body">
+    {% ifequal user.groups.all.0.name "teacher" %}
+
+  <h3 class="w3-text-grey "><span class="glyphicon glyphicon-edit"></span> تغییر اطلاعات درس</h3>
+  <hr>
+  {% if form.errors %}
+      {% for field in form %}
+          {% for error in field.errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+          </div>
+      {% endfor %}
+  {% endif %}
+  <form enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <div class="col-xs-5 w3-padding w3-right w3-mobile ">
+    {{form.as_p}}
+    <p><input type="button" class="btn btn-primary w3-margin-bottom" value="انتخاب تصویر" onclick="document.getElementById('file1').click();"></p>
+    <button type="submit" class="btn btn-warning">ذخیره</button>
+  </form>
+</div>
+{% else %}
+<div class="alert alert-danger">
+    <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+{% endifequal %}
+</div>
+</div>
+{% endif %}
+{% endif %}
+
+
+
+{% if not object %}
+<div class="panel panel-default">
+  <div class="panel-body">
+    {% ifequal user.groups.all.0.name "teacher" %}
+
+  <h3 class="w3-text-grey "><span class="glyphicon glyphicon-plus"></span> ایجاد درس جدید </h3>
+  <hr>
+  {% if form.errors %}
+      {% for field in form %}
+          {% for error in field.errors %}
+              <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+              </div>
+          {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+          </div>
+      {% endfor %}
+  {% endif %}
+  <form enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <div class="col-xs-5 w3-padding w3-right w3-mobile ">
+    {{form.as_p}}
+    <p><input type="button" class="btn btn-primary w3-margin-bottom" value="انتخاب تصویر" onclick="document.getElementById('file1').click();"></p>
+    <button type="submit" class="btn btn-success">تایید درس </button>
+  </form>
+</div>
+{% else %}
+<div class="alert alert-danger">
+    <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+{% endifequal %}
+</div>
+</div>
+  {% endif %}
+{% endblock %}

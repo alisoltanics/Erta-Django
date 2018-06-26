@@ -1,0 +1,37 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{% ifequal user.groups.all.0.name "teacher" %}
+
+<div class="w3-white w3-card-4 w3-round">
+<header class="w3-container w3-card w3-white w3-shadow">
+  <h3> دروس ارایه شده توسط شما <br></h3>
+</header>
+      <div class="w3-row w3-row-padding w3-margin w3-animate-right">
+        {% for course in course_list %}
+<div class="w3-card-4 w3-col w3-row-padding s4 w3-mobile w3-white w3-right w3-margin-bottom w3-round" style="width:33.33%;margin-top:5px;">
+
+  <img src="{{course.picture.url}}" alt="Norway" class="w3-mobile" style="width:100%;max-height:220px">
+  <div class="w3-container w3-right w3-text-brown">
+   <h2><h6>نام درس: {{course.cname|safe|truncatechars:400}}</h6></h2>
+   <p>نام استاد: {{course.prof.first_name|safe|truncatechars:400}} {{course.prof.last_name|safe|truncatechars:400}}</p>
+   <p> سال تحصیلی: {{course.year|safe|truncatechars:400}}</p>
+   <p> ترم: {{course.term|safe|truncatechars:400}}</p>
+    <a href="{% url 'content_list' pk=course.pk %}"><button class="w3-button w3-round w3-black w3-margin-bottom w3-hover-green">ورود</button></a>
+    <a href="{% url 'students_list' pk=course.pk %}"><button class="w3-button w3-round w3-blue w3-border w3-margin-bottom w3-hover-green w3-hover-shadow">دانشجویان</button></a>
+        <a href="{% url 'message_course_list' pk=course.pk %}"><button class="w3-button w3-round w3-blue w3-border w3-margin-bottom w3-hover-green w3-hover-shadow"> پیام ها</button></a>
+<a href="{% url 'course_answers' pk=course.pk %}"><button class="w3-button w3-round w3-cyan w3-text-white w3-border w3-margin-bottom w3-hover-green w3-hover-shadow"> تمرین ها</button></a>
+
+  </div>
+</div>
+      {% endfor %}
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-danger">
+    <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+{% endifequal %}
+
+
+{% endblock %}

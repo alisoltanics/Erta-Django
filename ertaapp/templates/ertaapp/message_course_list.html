@@ -1,0 +1,31 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+
+{% ifequal user.groups.all.0.name "teacher" %}
+{% for course in crs_admin %}
+
+<div class=" w3-row w3-row-padding w3-margin w3-animate-right">
+  {% for message in message_list|slice:":1" %}
+  <h4 class="w3-text-brown w3-padding w3-mobile"><i class="fa fa-angle-double-left" aria-hidden="true"></i> پیام ها</h4>
+  <h4 class="w3-text-blue w3-padding w3-mobile">نام درس: {{message.course.cname|safe}}</h4>
+  {% endfor %}
+{% for message in message_list %}
+<div class="w3-card w3-white w3-padding w3-margin w3-round">
+  <h6 class="w3-text-grey">ارسال شده توسط : <span class="w3-text-black">{{message.author|safe}} ({{message.author.first_name|safe}} {{message.author.last_name|safe}})</span></h6>
+  <p class="w3-text-grey"><i class="fa fa-calendar w3-text-orange" aria-hidden="true"></i> {{message.create_date}}</p>
+<div class="w3-panel w3-rightbar w3-card-4 w3-light-grey">
+  <i class="fa fa-quote-right w3-large w3-text-black"></i><br>
+      <p class="w3-xlarge w3-serif"><h5>عنوان: {{message.title|safe}}</h5></p>
+      <p class="w3-text-brown">{{message.text|safe}}</p>
+</div>
+</div>
+{% endfor %}
+</div>
+{% endfor %}
+{% else %}
+<div class="alert alert-danger">
+    <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+{% endifequal %}
+{% include "ertaapp/pagination.html" with page=page_obj %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{% ifequal user.groups.all.0.name "teacher" %}
+{% if object.course.prof == user %}
+<form method="POST">
+  {% csrf_token %}
+  <div class="panel-body">
+  <div class="alert alert-danger">
+  <h2> '{{object.title}}' را حذف میکنید؟ </h2><br>
+  <input type="submit" class="btn btn-danger w3-large" value="تایید">
+</div>
+</div>
+</form>
+{% else %}
+<div class="alert alert-danger">
+  <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+{% endif %}
+{% endifequal %}
+{% endblock %}

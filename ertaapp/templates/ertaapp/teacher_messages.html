@@ -1,0 +1,37 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{% ifequal user.groups.all.0.name "student" %}
+
+    <div class="w3-card w3-white w3-padding">
+      <h3>پاسخ های ارسال شده توسط اساتید</h3>
+    </div>
+      <div class=" w3-row w3-row-padding w3-margin w3-animate-right">
+      {% for reply in reply_all %}
+      <div class="w3-card w3-white w3-padding w3-margin w3-round">
+        <p class="w3-text-grey"><i class="fa fa-calendar w3-text-orange" aria-hidden="true"></i> {{reply.create_date}}</p>
+      <div class="w3-panel w3-rightbar w3-card-4 w3-light-grey">
+        <i class="fa fa-quote-right w3-large w3-text-black"></i><br>
+        {% for m in msg %}
+          {% if m.id == reply.message_id %}
+
+            <p class="w3-large w3-serif w3-text-blue">نام استاد: {{m.to_prof.first_name|safe}} {{m.to_prof.last_name|safe}}</p>
+            <p class="w3-large w3-serif w3-text-blue">نام درس: {{m.course.cname|safe}}</p>
+            <p class="w3-large w3-serif">عنوان پیام شما: {{m.title|safe}}</p>
+            <p class="w3-large w3-serif">متن پیام شما: {{m.text|safe}}</p>
+
+          {% endif %}
+        {% endfor %}
+<hr>
+            <p class="w3-text-brown w3-large"><i class="fa fa-reply" aria-hidden="true"></i> پاسخ استاد: {{reply.text|safe}}</p>
+      </div>
+      </div>
+      {% endfor %}
+     </div>
+     {% else %}
+     <div class="alert alert-danger">
+         <strong>اجازه‌ی دسترسی ندارید!</strong>
+     </div>
+     {% endifequal %}
+     {% include "ertaapp/pagination.html" with page=page_obj %}
+
+{% endblock %}

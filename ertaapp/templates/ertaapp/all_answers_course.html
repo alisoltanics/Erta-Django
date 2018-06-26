@@ -1,0 +1,37 @@
+{% extends "ertaapp/base.html" %}
+{% block content %}
+{% ifequal user.groups.all.0.name "teacher" %}
+{% for course in crs_admin %}
+
+
+    <div class="w3-card w3-white w3-padding">
+      <h5><a href="{{purl}}"><span class="w3-left w3-button w3-border w3-padding w3-blue w3-hover-white w3-mobile "><i class="fa fa-angle-double-right" aria-hidden="true"></i>بازگشت</span></a>تمرین های ارسال شده</h5>
+  </div>
+      <div class=" w3-row w3-row-padding w3-margin w3-animate-right">
+        {% for answer in cnt|slice:":1" %}
+        <h4 class="w3-text-blue">نام درس: {{answer.course.cname|safe}}</h4>
+
+        {% endfor %}
+
+      {% for answer in cnt %}
+      <div class="w3-card w3-white w3-padding w3-margin">
+        <h6>دانشجو : {{answer.author|safe}} ({{answer.author.first_name|safe}} {{answer.author.last_name|safe}})</h6>
+        <h6>عنوان تمرین: {{answer.content|safe}}</h6>
+        <p class="w3-text-brown">{{answer.text|safe}}</p>
+        <a href="{{answer.file_ta.url}}"><button class="btn btn-success"> فایل پاسخ</button></a> <br><br>
+        <p class="w3-text-blue"><i class="fa fa-calendar w3-text-orange" aria-hidden="true"></i> {{answer.create_date}}</p>
+
+      </div>
+
+
+      {% endfor %}
+
+</div>
+{% endfor %}
+{% else %}
+<div class="alert alert-danger">
+    <strong>اجازه‌ی دسترسی ندارید!</strong>
+</div>
+{% endifequal %}
+{% include "ertaapp/pagination.html" with page=page_obj %}
+{% endblock %}
