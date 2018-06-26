@@ -11,5 +11,5 @@ A simple class management system
  7. django-tinymce4-lite 1.7.0
  8.  pyenchant 2.0.0
  
- [Erta](http://erta.pythonanywhere.com/)
+ # [Erta](http://erta.pythonanywhere.com/)
 
